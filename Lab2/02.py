@@ -1,5 +1,3 @@
-from operator import index
-
 BOOKS_DATABASE = [
     {
         "id": 1,
@@ -15,43 +13,73 @@ BOOKS_DATABASE = [
 
 
 # TODO написать класс Book
-
 class Book:
-
     def __init__(self, id_: int, name: str, pages: int):
+
+        """
+        Инициализирует объект Book.
+        id_ (int): Уникальный идентификатор книги.
+        name (str): Название книги.
+        pages (int): Количество страниц в книге.
+
+        """
+
         self.id_ = id_
         self.name = name
         self.pages = pages
 
     @classmethod
     def from_dict(cls, dict_book: dict) -> "Book":
+        """
+        Создает новый объект Book из словаря.
+        dict_book (dict): Словарь, содержащий информацию о книге.
+        Ключи должны соответствовать атрибутам класса: 'id_', 'name', 'pages'.
+
+        """
+
         return cls(**dict_book)
 
     def __repr__(self) -> str:
+        #возвращает строковое представление объекта в формате: Book(id_=..., name=..., pages=...)
         return f'Book(id_={self.id_}, name={self.name!r}, pages={self.pages})'
 
     def __str__(self) -> str:
+        #возвращает строковое представление объекта в формате: Книга "{название_книги}"
         return f'Книга "{self.name}"'
 
 # TODO написать класс Library
-
 class Library:
 
     def __init__(self, books=None):
+        """
+        Инициализирует объект Library.
+        books (list[Book], optional): Список книг для инициализации библиотеки.
+         По умолчанию, пустой список.
+        """
         self.books = books if books is not None else []
 
     def get_next_book_id(self):
+        """
+        Возвращает следующий доступный идентификатор книги.
+        Возвращает 1 если список пуст.
+
+        """
         if not self.books:
             return 1
         else:
-            return max(book.id_ for book in self.books) + 1
+            return self.books[-1].id_ + 1
+            books.index[-1]
+            #return max(book.id_ for book in self.books) + 1
 
     def get_index_by_book_id(self, book_id) -> int:
+        """
+        Возвращает индекс книги в списке self.books по её идентификатору.
+
+        """
         for i, book in enumerate(self.books):
             if book.id_ == book_id:
                 return i
         raise ValueError("Книги с запрашиваемым ID не существует")
-
 
 if __name__ == '__main__':
     empty_library = Library()  # инициализируем пустую библиотеку
@@ -61,7 +89,6 @@ if __name__ == '__main__':
         Book(id_=book_dict["id"], name=book_dict["name"], pages=book_dict["pages"]) for book_dict in BOOKS_DATABASE
     ]
     library_with_books = Library(books=list_books)  # инициализируем библиотеку с книгами
-
     print(library_with_books.get_next_book_id())  # проверяем следующий id для непустой библиотеки
 
     print(library_with_books.get_index_by_book_id(1))  # проверяем индекс книги с id = 1
